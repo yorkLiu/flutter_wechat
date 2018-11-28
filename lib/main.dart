@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'home/home_page.dart';
+import 'constants.dart';
 
-void main() => runApp(WeChatApp());
+void main() => runApp(MaterialApp(
+  title: '微信',
+  theme: ThemeData.light().copyWith(
+    primaryColor: Color(AppColors.AppBarColor)
+  ),
+  home: HomePage(),
+));
 
-class WeChatApp extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: '微信',
-      home: HomePage(),
-    );
-  }
-
-}
 
