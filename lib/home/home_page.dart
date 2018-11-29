@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
+import 'conversation_page.dart';
 
 enum ActionItems {
   GROUP_CHAT, ADD_FRIEND, QR_SCAN, PAYMENT, HELP
@@ -91,7 +92,7 @@ class HomePageState extends State<HomePage> {
 
     // init the pages
     _pages = [
-      Container(color: Colors.white),
+      ConversationPage(),
       Container(color: Colors.brown),
       Container(color: Colors.lightBlue),
       Container(color: Colors.blueGrey)
