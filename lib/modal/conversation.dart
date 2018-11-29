@@ -29,21 +29,21 @@ class Conversation {
         || avatar.toLowerCase().indexOf("https") ==0 );
   }
 
-  String avatar;
+  final String avatar;
 
-  String title;
+  final String title;
 
-  int titleColor;
+  final int titleColor;
 
-  String description;
+  final String description;
 
-  String updateAt;
+  final String updateAt;
 
-  bool isMute;
+  final bool isMute;
 
-  int unreadMsgCount;
+  final int unreadMsgCount;
 
-  bool displayDot;
+  final bool displayDot;
 
 }
 

@@ -30,6 +30,66 @@ class _ConversationItem extends StatelessWidget{
       );
     }
 
+    Widget avatarUnReadMix;
+
+    // 如果有 unread 消息，则显示其数量
+    // 如果没有，则不显示
+    if(conversation.unreadMsgCount > 0){
+      // 未读消息数量
+      Widget unReadMsgContainer = Container(
+        width: Constants.UnReadMsgNotifyDotSize,
+        height: Constants.UnReadMsgNotifyDotSize,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: Color(AppColors.NotifyDotBg),
+            borderRadius: BorderRadius.circular(Constants.UnReadMsgNotifyDotSize/2)
+        ),
+
+        child: Text(
+            conversation.unreadMsgCount.toString(),
+            style: AppStyle.UnreadMsgCountDotStyle
+        ),
+      );
+
+      avatarUnReadMix = Stack(
+        overflow: Overflow.visible,
+        children: <Widget>[
+          avatar,
+          Positioned(
+            top: -6.0,
+            right: -6.0,
+            child: unReadMsgContainer,
+          )
+        ],
+      );
+    } else {
+      avatarUnReadMix = avatar;
+    }
+
+    var rightPartItems = <Widget>[
+      Text(conversation.updateAt, style: AppStyle.DescriptionStyle),
+      SizedBox(height: 10.0)
+    ];
+
+    if(conversation.isMute){
+      // 勿扰图标
+      rightPartItems.add(
+          Icon(IconData(
+              0xe755,
+              fontFamily: Constants.AppFontFamily
+          ),
+            size: Constants.ConversationMuteIconSize,
+            color: Color(AppColors.ConversationMuteIcon))
+      );
+    } else {
+      // 如果没有 mute icon, 则用 sizedbox 来填充一个大小于 mute icon的区域
+      // 以免 『updateAt』显示的位置不统一
+      rightPartItems.add(
+          SizedBox(
+              width: Constants.ConversationMuteIconSize,
+              height: Constants.ConversationMuteIconSize));
+    }
+
     return Container(
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
@@ -45,7 +105,7 @@ class _ConversationItem extends StatelessWidget{
         children: <Widget>[
 
           // 头像
-          avatar,
+          avatarUnReadMix,
 
           Container(width: 10.0),
           Expanded(
@@ -64,9 +124,7 @@ class _ConversationItem extends StatelessWidget{
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(conversation.updateAt, style: AppStyle.DescriptionStyle)
-            ],
+            children: rightPartItems,
           )
 
         ],
