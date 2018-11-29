@@ -29,6 +29,9 @@ class HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   List<NavigationIconView> _navigationViews;
 
+  PageController _pageController;
+  List<Widget> _pages;
+
   void initState(){
     super.initState();
     _navigationViews = [
@@ -80,6 +83,19 @@ class HomePageState extends State<HomePage> {
           )
       )
     ];
+
+    // init the PageController
+    _pageController = PageController(
+        initialPage: _currentIndex
+    );
+
+    // init the pages
+    _pages = [
+      Container(color: Colors.white),
+      Container(color: Colors.brown),
+      Container(color: Colors.lightBlue),
+      Container(color: Colors.blueGrey)
+    ];
   }
 
 
@@ -95,8 +111,11 @@ class HomePageState extends State<HomePage> {
       onTap: (int index){
         setState(() {
           _currentIndex = index;
+
+          // 点击 botto navigation bar 时跳转到页面
+          _pageController.animateToPage(_currentIndex, duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+
         });
-        print("你点击了第$index button");
       },
     );
 
@@ -176,13 +195,24 @@ class HomePageState extends State<HomePage> {
 
           ),
 
-
           Container(width: 10.0),
         ],
       ),
 
-      body: Container(
-        color: Colors.white,
+      body: PageView.builder(
+          itemBuilder: (BuildContext context, int index){
+            return _pages[index];
+          },
+          controller: _pageController,
+          itemCount: _pages.length,
+          onPageChanged: (int index){
+            setState(() {
+              // 滑动到哪个页面，则bottom navigation bar 就应该是哪个button选中
+              // 页面与bottom navigation bar 联动
+              _currentIndex = index;
+            });
+
+          }
       ),
 
       bottomNavigationBar: bottomNavigationBar,
