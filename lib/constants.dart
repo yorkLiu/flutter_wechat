@@ -5,6 +5,9 @@ class AppColors{
   static const TabIconNormal = 0xff999999;
   static const TabIconActive = 0xff46c11b;
 
+  static const AppBarPopupMenuColor = 0xffffffff;
+  static const TitleTextColor = 0xff353535;
+
 
 }
 

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
 
+enum ActionItems {
+  GROUP_CHAT, ADD_FRIEND, QR_SCAN, PAYMENT, HELP
+}
+
 class HomePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -13,8 +17,8 @@ class NavigationIconView{
   BottomNavigationBarItem item;
   NavigationIconView({Key key, String title, IconData icon, IconData activeIcon}):
       item = BottomNavigationBarItem(
-        icon: Icon(icon, color: Color(AppColors.TabIconNormal)),
-        activeIcon: Icon(activeIcon, color: Color(AppColors.TabIconActive)),
+        icon: Icon(icon),
+        activeIcon: Icon(activeIcon),
         title: Text(title),
         backgroundColor: Colors.white
       );
@@ -83,32 +87,97 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     final BottomNavigationBar bottomNavigationBar = BottomNavigationBar(
+      fixedColor: const Color(AppColors.TabIconActive),
       items: _navigationViews.map<BottomNavigationBarItem>((NavigationIconView navigationViews)=>navigationViews.item)
             .toList(),
       currentIndex: _currentIndex,
       type: BottomNavigationBarType.fixed,
       onTap: (int index){
-        _currentIndex = index;
+        setState(() {
+          _currentIndex = index;
+        });
         print("你点击了第$index button");
       },
     );
 
+    _buildPopupMenuItem(int iconName, String title){
+      return Row(
+        children: <Widget>[
+          Icon(IconData(
+              iconName,
+              fontFamily: Constants.AppFontFamily),
+            size: 22.0,
+            color: const Color(AppColors.AppBarPopupMenuColor),
+          ),
+
+          Container(width: 12.0),
+
+          Text(title, style: TextStyle(color: const Color(AppColors.AppBarPopupMenuColor)))
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('微信', style: TextStyle(fontSize: 18.0),),
+        title: Text('微信', style: TextStyle(fontSize: 18.0)),
+        elevation: 0.0, // 去掉 app bar 的影映
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(IconData(
+              0xe65e,
+              fontFamily: Constants.AppFontFamily
+            ),
+              size: 22.0
+            ),
             onPressed: () {
               print("你点击了搜索按钮");
             },
           ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-                print("你点击了添加按钮");
-            }
-          )
+
+          Container(width: 16.0),
+
+          PopupMenuButton(
+            offset: Offset(0, 60.0),
+            itemBuilder: (BuildContext context){
+              return <PopupMenuItem<ActionItems>>[
+                PopupMenuItem(
+                    child: _buildPopupMenuItem(0xe69e, "发起群聊"),
+                    value: ActionItems.GROUP_CHAT
+                ),
+
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe638, "添加朋友"),
+                  value: ActionItems.ADD_FRIEND,
+                ),
+
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe61b, "扫一扫"),
+                  value: ActionItems.QR_SCAN,
+                ),
+
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe62a, "收付款"),
+                  value: ActionItems.PAYMENT,
+                ),
+
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe63d, "帮助与反馈"),
+                  value: ActionItems.HELP,
+                ),
+              ];
+            },
+            icon: Icon(IconData(
+                0xe658,
+                fontFamily: Constants.AppFontFamily),
+                size: 22.0),
+            onSelected: (ActionItems item) {
+              print("你点击了$item");
+            },
+
+          ),
+
+
+          Container(width: 10.0),
         ],
       ),
 
