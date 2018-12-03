@@ -112,33 +112,59 @@ class _ContactsPageState extends State<ContactsPage> {
     });
   }
 
+  Widget buildIndexBar(){
+    final List<Widget> indexIndictor= Constants.CONTACT_INDEX_CHARACTERS.map((String character){
+      return Expanded(
+          child: Text(character)
+      );
+    }).toList();
+
+    return Column(
+        children: indexIndictor,
+    );
+  // ignore: expected_class_member
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
+    return Stack(
+      children: <Widget>[
+        ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              bool showGroupTitle = true;
+              Contact contact;
 
-          bool showGroupTitle = true;
-          Contact contact;
+              if (index >= _mainFunctionData.length) {
+                // 实现分组，给每个item 都添加 groupTitle,
+                // 然后在这里用 showGroupTitle 来控制是否显示它
+                int contactIndex = index - _mainFunctionData.length;
+                contact = _contacts[index];
+                if (contactIndex >= 1 &&
+                    contact.nameIndex == _contacts[index - 1].nameIndex) {
+                  showGroupTitle = false;
+                }
+              } else {
+                contact = _contacts[index];
+                showGroupTitle = false;
+              }
 
-          if(index >= _mainFunctionData.length){
-            // 实现分组，给每个item 都添加 groupTitle,
-            // 然后在这里用 showGroupTitle 来控制是否显示它
-            int contactIndex = index - _mainFunctionData.length;
-            contact = _contacts[index];
-            if(contactIndex >=1 && contact.nameIndex == _contacts[index -1].nameIndex){
-              showGroupTitle = false;
-            }
-          } else {
-            contact = _contacts[index];
-            showGroupTitle = false;
-          }
+              return _ContactItem(
+                  contact: contact,
+                  showGroupTitle: showGroupTitle
+              );
+            },
+            itemCount: _contacts.length
+        ),
 
-          return _ContactItem(
-            contact: contact,
-            showGroupTitle: showGroupTitle
-          );
-        },
-        itemCount: _contacts.length
+        Positioned(
+          top: 0.0,
+          right: 0.0,
+          bottom: 0.0,
+          width: 25.0,
+          child: buildIndexBar(),
+        )
+      ],
+
     );
   }
 }

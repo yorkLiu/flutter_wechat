@@ -58,4 +58,12 @@ class Constants {
   static const UnReadMsgNotifyDotSize = 20.0;
   static const ConversationMuteIconSize = 18.0;
   static const ContactAvatarSize = 36.0;
+
+  static const CONTACT_INDEX_CHARACTERS = [
+    "↑", "☆",
+    "A", "B", "C", "D", "E", "F", "G",
+    "H", "I", "J", "K", "L", "M", "N",
+    "O", "P", "Q", "R", "S", "T", "U",
+    "V", "W", "X", "Y", "Z", "#"
+  ];
 }
