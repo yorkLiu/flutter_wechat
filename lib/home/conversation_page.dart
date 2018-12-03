@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../modal/conversation.dart' show ConversationPageData;
 import '../constants.dart' show AppColors, AppStyle, Constants;
-import '../modal/conversation.dart' show Conversation, ConversationPageData;
+import '../modal/conversation.dart' show Conversation, ConversationPageData, Device;
 
 
 class _ConversationItem extends StatelessWidget{
@@ -133,6 +133,60 @@ class _ConversationItem extends StatelessWidget{
   }
 }
 
+class _DeviceInfoItem extends StatelessWidget{
+
+  const _DeviceInfoItem({
+    this.device : Device.MAC
+  });
+
+  final Device device;
+
+  int get iconName {
+    return this.device == Device.WIN ? 0xe75e : 0xe640;
+  }
+
+  String get deviceName{
+    return this.device == Device.WIN ? "Windows" : "Mac";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      padding: EdgeInsets.only(left:20.0, top:10.0, right:10.0, bottom: 10.0),
+//    height: 60.0,
+//      padding: EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: Color(AppColors.ConversationItemBg),
+        border: Border(
+            bottom: BorderSide(
+              color: Color(AppColors.DividerColor),
+              width: Constants.DividerWidth
+            )
+        )
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Icon(IconData(
+            iconName,
+            fontFamily: Constants.AppFontFamily
+          ),
+          size: 26.0, color: Color(AppColors.DeviceInfoItemIcon),
+          ),
+
+          SizedBox(width: 20.0),
+          Text("$deviceName 微信已登陆，手机通知已关闭", style: AppStyle.DeviceInfoItemTextStyle)
+
+        ],
+      ),
+
+    );
+  }
+
+}
+
 class ConversationPage extends StatefulWidget {
   @override
   _ConversationPageState createState() => _ConversationPageState();
@@ -145,9 +199,13 @@ class _ConversationPageState extends State<ConversationPage> {
   Widget build(BuildContext context) {
     return ListView.builder(
         itemBuilder: (BuildContext context, int index){
-          return _ConversationItem(conversation: data.conversations[index]);
+          if(data.device != null && index == 0){
+            return _DeviceInfoItem(device: data.device);
+          } else {
+            return _ConversationItem(conversation: data.conversations[index]);
+          }
         },
-      itemCount: data.conversations.length,
+        itemCount: data.conversations.length
     );
   }
 }
