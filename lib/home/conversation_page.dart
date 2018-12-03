@@ -199,13 +199,18 @@ class _ConversationPageState extends State<ConversationPage> {
   Widget build(BuildContext context) {
     return ListView.builder(
         itemBuilder: (BuildContext context, int index){
-          if(data.device != null && index == 0){
-            return _DeviceInfoItem(device: data.device);
+
+          if(data.device != null){
+            if (index == 0){
+              return _DeviceInfoItem(device: data.device);
+            } else {
+              return _ConversationItem(conversation: data.conversations[index-1]);
+            }
           } else {
             return _ConversationItem(conversation: data.conversations[index]);
           }
         },
-        itemCount: data.conversations.length
+        itemCount: data.device != null ? data.conversations.length +1 : data.conversations.length
     );
   }
 }
