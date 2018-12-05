@@ -20,6 +20,11 @@ class Contact {
   final String name;
 
   final String nameIndex;
+
+  @override
+  String toString() {
+   return "{avatar: $avatar, name: $name, nameIndex: $nameIndex}";
+  }
 }
 
 class ContactPageData {
