@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../modal/conversation.dart' show ConversationPageData;
 import '../constants.dart' show AppColors, AppStyle, Constants;
 import '../modal/conversation.dart' show Conversation, ConversationPageData, Device;
@@ -16,11 +17,18 @@ class _ConversationItem extends StatelessWidget{
     Widget avatar;
     if(conversation.avatarFromNetWork()){
       // 图片来源于网络
-      avatar = Image.network(
-          conversation.avatar,
+      avatar = Image(
+          image: CachedNetworkImageProvider(
+            conversation.avatar
+          ),
           width: Constants.ConversationAvatarSize,
-          height: Constants.ConversationAvatarSize
-      );
+          height: Constants.ConversationAvatarSize);
+
+//      avatar = Image.network(
+//          conversation.avatar,
+//          width: Constants.ConversationAvatarSize,
+//          height: Constants.ConversationAvatarSize
+//      );
     } else {
       // 图片来源于 assets目录
       avatar = Image.asset(
