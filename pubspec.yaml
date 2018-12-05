@@ -20,6 +20,17 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
+  # https://pub.dartlang.org/packages/cached_network_image
+  # A flutter library to show images from the internet and keep them in the cache directory.
+  # new CachedNetworkImage(
+  #           imageUrl: "http://via.placeholder.com/350x150",
+  #           placeholder: new CircularProgressIndicator(),
+  #           errorWidget: new Icon(Icons.error),
+  #         ),
+  # or:
+  # new Image(image: new CachedNetworkImageProvider(url))
+  cached_network_image: ^0.5.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
