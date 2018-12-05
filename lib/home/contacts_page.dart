@@ -6,6 +6,7 @@ import '../modal/contact.dart';
 class ContactsPage extends StatefulWidget {
 
   Color _indexBarBG = Colors.transparent;
+  String _currentLetter = null;
 
   @override
   _ContactsPageState createState() => _ContactsPageState();
@@ -177,6 +178,7 @@ class _ContactsPageState extends State<ContactsPage> {
       Offset _pos = _box.globalToLocal(globalPos);
       int _idx = (_pos.dy ~/ _tileHeight).clamp(0, indexIndicator.length -1);
       return Constants.CONTACT_INDEX_CHARACTERS[_idx];
+//      return Constants.CONTACT_INDEX_CHARACTERS[_idx];
     }
 
     // 滑动到哪个 index position
@@ -191,8 +193,9 @@ class _ContactsPageState extends State<ContactsPage> {
 
     @override
     void dispose(){
-      _scrollController.dispose();
       super.dispose();
+      _scrollController.dispose();
+      widget._currentLetter = null;
     }
 
     return Container(
@@ -202,6 +205,7 @@ class _ContactsPageState extends State<ContactsPage> {
           setState(() {
             widget._indexBarBG = Colors.black12;
             var _letter = _getIndexLetter(context, details.globalPosition);
+            widget._currentLetter = _letter;
             _jumpToIndex(_letter);
           });
         },
@@ -209,6 +213,7 @@ class _ContactsPageState extends State<ContactsPage> {
         onVerticalDragUpdate: (DragUpdateDetails details){
           setState(() {
             var _letter = _getIndexLetter(context, details.globalPosition);
+            widget._currentLetter = _letter;
             _jumpToIndex(_letter);
           });
         },
@@ -216,11 +221,13 @@ class _ContactsPageState extends State<ContactsPage> {
         onVerticalDragEnd: (DragEndDetails details){
           setState(() {
             widget._indexBarBG = Colors.transparent;
+            widget._currentLetter = null;
           });
         },
         onVerticalDragCancel: (){
           setState(() {
             widget._indexBarBG = Colors.transparent;
+            widget._currentLetter = null;
           });
         },
         child: Column(
@@ -233,47 +240,66 @@ class _ContactsPageState extends State<ContactsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        ListView.builder(
-            controller: _scrollController,
-            itemBuilder: (BuildContext context, int index) {
-              bool showGroupTitle = true;
-              Contact contact;
 
-              if (index >= _mainFunctionData.length) {
-                // 实现分组，给每个item 都添加 groupTitle,
-                // 然后在这里用 showGroupTitle 来控制是否显示它
-                int contactIndex = index - _mainFunctionData.length;
-                contact = _contacts[index];
-                if (contactIndex >= 1 &&
-                    contact.nameIndex == _contacts[index - 1].nameIndex) {
-                  showGroupTitle = false;
-                }
-              } else {
-                contact = _contacts[index];
+    List<Widget> _body = [
+      ListView.builder(
+          controller: _scrollController,
+          itemBuilder: (BuildContext context, int index) {
+            bool showGroupTitle = true;
+            Contact contact;
+
+            if (index >= _mainFunctionData.length) {
+              // 实现分组，给每个item 都添加 groupTitle,
+              // 然后在这里用 showGroupTitle 来控制是否显示它
+              int contactIndex = index - _mainFunctionData.length;
+              contact = _contacts[index];
+              if (contactIndex >= 1 &&
+                  contact.nameIndex == _contacts[index - 1].nameIndex) {
                 showGroupTitle = false;
               }
+            } else {
+              contact = _contacts[index];
+              showGroupTitle = false;
+            }
 
-              return _ContactItem(
-                  contact: contact,
-                  showGroupTitle: showGroupTitle
-              );
-            },
-            itemCount: _contacts.length
+            return _ContactItem(
+                contact: contact,
+                showGroupTitle: showGroupTitle
+            );
+          },
+          itemCount: _contacts.length
+      ),
+
+      Positioned(
+        top: 0.0,
+        right: 0.0,
+        bottom: 0.0,
+        width: 25.0,
+        child: LayoutBuilder(
+            builder: _buildIndexBar
         ),
+      )
+    ];
 
-        Positioned(
-          top: 0.0,
-          right: 0.0,
-          bottom: 0.0,
-          width: 25.0,
-          child: LayoutBuilder(
-              builder: _buildIndexBar
+
+    if(widget._currentLetter != null && widget._currentLetter.isNotEmpty){
+      _body.add(Center(
+        child: Container(
+          width: Constants.IndexIndicatorSize,
+          height: Constants.IndexIndicatorSize,
+          decoration: BoxDecoration(
+              color: Colors.black38,
+              borderRadius: BorderRadius.all(Radius.circular(Constants.IndexIndicatorCircular))
           ),
+          child: Center(
+            child: Text(widget._currentLetter, style: AppStyle.IndexIndicatorTextStyle),
+          )
         )
-      ],
+      ));
+    }
 
+    return Stack(
+      children: _body,
     );
   }
 }

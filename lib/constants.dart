@@ -49,6 +49,11 @@ class AppStyle {
     color: Color(AppColors.ContactGroupTitleText),
   );
 
+  static const IndexIndicatorTextStyle = TextStyle(
+      fontSize: 40.0,
+      color: Colors.white
+  );
+
 }
 
 class Constants {
@@ -58,6 +63,9 @@ class Constants {
   static const UnReadMsgNotifyDotSize = 20.0;
   static const ConversationMuteIconSize = 18.0;
   static const ContactAvatarSize = 36.0;
+
+  static const IndexIndicatorSize = 60.0;
+  static const IndexIndicatorCircular=5.0;
 
   static const CONTACT_INDEX_CHARACTERS = [
     "↑", "☆",
