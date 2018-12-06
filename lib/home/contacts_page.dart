@@ -142,6 +142,10 @@ class _ContactsPageState extends State<ContactsPage> {
 
     //////////////// 初始化并计算 每个 item 的 position [START/////////////////////
     var _totalPos = _mainFunctionData.length * _ContactItem._height(false);
+
+    // 设置 "↑" 的位置
+    _globalPosition[Constants.CONTACT_INDEX_CHARACTERS[0]] = 0.0;
+
     for (var i = _mainFunctionData.length; i < _contacts.length; i++) {
       bool _hasGroupTitle = true;
       Contact _contact = _contacts[i];
@@ -176,6 +180,7 @@ class _ContactsPageState extends State<ContactsPage> {
     String _getIndexLetter(BuildContext context, Offset globalPos){
       RenderBox _box  = context.findRenderObject();
       Offset _pos = _box.globalToLocal(globalPos);
+      print(_pos);
       int _idx = (_pos.dy ~/ _tileHeight).clamp(0, indexIndicator.length -1);
       return Constants.CONTACT_INDEX_CHARACTERS[_idx];
 //      return Constants.CONTACT_INDEX_CHARACTERS[_idx];
