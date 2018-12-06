@@ -14,9 +14,7 @@ For help getting started with Flutter, view our online
 
 ## 效果
 ### Android
-<div>
-    <video preload="auto" src="screenshots/Flutter-Wechat-Android.mp4">
-</div>
+![mp4](screenshots/Flutter-Wechat-Android.mp4)
 
 ### ISO
 <div>
